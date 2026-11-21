@@ -4,19 +4,43 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="文字图片取模软件">
 
-    <NavigationView
-        x:Name="NavView"
-        IsBackButtonVisible="Collapsed"
-        IsSettingsVisible="False"
-        OpenPaneLength="220"
-        PaneDisplayMode="Left"
-        SelectionChanged="NavView_SelectionChanged">
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="TitleBarRow" Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <NavigationView.MenuItems>
-            <NavigationViewItem Content="文字取模" Icon="Font" IsSelected="True" Tag="text" />
-            <NavigationViewItem Content="图片取模" Icon="Pictures" Tag="image" />
-        </NavigationView.MenuItems>
+        <Grid x:Name="AppTitleBar" Grid.Row="0" Padding="16,0,0,0" Background="Transparent">
+            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <ContentControl ContentTemplate="{StaticResource AppLogoTemplate}" IsTabStop="False" />
+                <TextBlock x:Name="AppTitleText"
+                           Text="文字图片取模软件"
+                           FontSize="15"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
 
-        <Frame x:Name="ContentFrame" />
-    </NavigationView>
+        <NavigationView
+            x:Name="NavView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+            OpenPaneLength="220"
+            PaneDisplayMode="Left"
+            Background="Transparent"
+            SelectionChanged="NavView_SelectionChanged">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="文字取模" Icon="Font" IsSelected="True" Tag="text" />
+                <NavigationViewItem Content="图片取模" Icon="Pictures" Tag="image" />
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="关于" Icon="Help" Tag="about" />
+            </NavigationView.FooterMenuItems>
+
+            <Frame x:Name="ContentFrame" Background="Transparent" />
+        </NavigationView>
+    </Grid>
 </Window>

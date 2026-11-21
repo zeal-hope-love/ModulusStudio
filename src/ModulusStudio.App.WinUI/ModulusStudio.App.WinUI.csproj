@@ -15,12 +15,27 @@
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <AllowedReferenceRelatedFileExtensions>.dll;.exe</AllowedReferenceRelatedFileExtensions>
+    <Version>1.0.0</Version>
+    <Product>文字图片取模软件</Product>
+    <AssemblyTitle>文字图片取模软件</AssemblyTitle>
+    <Company>ModulusStudio</Company>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.7.0" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\app-icon.png" LogicalName="ModulusStudio.Assets.app-icon.png" />
+  </ItemGroup>
+
+  <!-- 发布目录只保留单个 exe，移除依赖包附带的调试符号 -->
+  <Target Name="RemovePdbFromPublish" AfterTargets="Publish">
+    <Delete Files="$(PublishDir)libSkiaSharp.pdb" />
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\ModulusStudio.Core\ModulusStudio.Core.csproj" />
