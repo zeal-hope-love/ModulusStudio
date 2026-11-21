@@ -12,9 +12,10 @@ public sealed partial class AboutPage : Page
 
         VersionText.Text = $"版本 {AppUpdateService.CurrentVersionText}";
         VersionRowText.Text = AppUpdateService.CurrentVersionText;
+        RepoLink.Content = AppUpdateService.RepositoryUrl;
         RepoLink.Visibility = AppUpdateService.IsConfigured ? Visibility.Visible : Visibility.Collapsed;
         SourceText.Text = AppUpdateService.IsConfigured
-            ? AppUpdateService.RepositoryUrl
+            ? "更新源：GitHub Releases"
             : "更新源未配置：发布到 GitHub 后填写 AppUpdateService 中的 GitHubOwner。";
         UpdateStatusText.Text = AppUpdateService.IsConfigured
             ? "点击“检查更新”获取最新版本。"

@@ -14,7 +14,7 @@ public sealed record UpdateInfo(Version Version, string DisplayVersion, string A
 public static class AppUpdateService
 {
     // 发布到 GitHub Releases 后，把 Owner 改成你的 GitHub 用户名/组织名
-    public const string GitHubOwner = "";
+    public const string GitHubOwner = "zeal-hope-love";
     public const string GitHubRepo = "ModulusStudio";
 
     public static bool StartupCheckDone { get; set; }

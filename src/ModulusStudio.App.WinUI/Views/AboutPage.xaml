@@ -30,6 +30,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="名称" Style="{StaticResource FieldLabel}" />
@@ -38,12 +39,16 @@
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="版本" Style="{StaticResource FieldLabel}" />
                         <TextBlock x:Name="VersionRowText" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="运行环境" Style="{StaticResource FieldLabel}" />
-                        <TextBlock Grid.Row="2" Grid.Column="1" Text="WinUI 3 · Windows App SDK 2.7 · .NET 10" TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="来源" Style="{StaticResource FieldLabel}" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"
+                                   Text="由 AI 基于原版「文字取模软件」和「图片取模软件」重写，界面使用 WinUI 3。" />
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="功能" Style="{StaticResource FieldLabel}" />
-                        <TextBlock Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"
-                                   Text="文字与图片点阵取模，支持多种扫描方式、C51/A51 及自定义输出模板。" />
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="运行环境" Style="{StaticResource FieldLabel}" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="WinUI 3 · Windows App SDK 2.7 · .NET 10" TextWrapping="Wrap" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="仓库" Style="{StaticResource FieldLabel}" />
+                        <HyperlinkButton x:Name="RepoLink" Grid.Row="4" Grid.Column="1" Padding="0"
+                                         HorizontalAlignment="Left" Click="RepoLink_Click" />
                     </Grid>
                 </StackPanel>
             </Border>
@@ -55,7 +60,6 @@
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Button x:Name="CheckUpdateButton" Content="检查更新" Click="CheckUpdate_Click"
                                 Style="{StaticResource AccentButtonStyle}" />
-                        <HyperlinkButton x:Name="RepoLink" Content="在 GitHub 上查看" Click="RepoLink_Click" />
                     </StackPanel>
                     <TextBlock x:Name="SourceText" Style="{StaticResource FieldLabel}" TextWrapping="Wrap" />
                 </StackPanel>
