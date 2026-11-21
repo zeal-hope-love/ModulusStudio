@@ -30,6 +30,17 @@ public sealed partial class MainWindow : Window
         var scale = GetDpiForWindow(hwnd) / 96.0;
         appWindow.Resize(new Windows.Graphics.SizeInt32((int)(1280 * scale), (int)(820 * scale)));
 
+        // 使用系统默认的高标题栏（与 Windows 设置一致的高度），Windows 10 上会自动忽略
+        try
+        {
+            if (AppWindowTitleBar.IsCustomizationSupported())
+                appWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
+        }
+        catch
+        {
+            // 旧系统不支持时保持默认标题栏
+        }
+
         ContentFrame.Navigate(typeof(TextModulusPage), null, new EntranceNavigationTransitionInfo());
     }
 
