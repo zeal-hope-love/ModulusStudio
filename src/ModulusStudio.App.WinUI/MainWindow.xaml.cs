@@ -1,8 +1,10 @@
 using System.Runtime.InteropServices;
 using Microsoft.UI;
+using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 using ModulusStudio.App.WinUI.Views;
 
@@ -16,6 +18,12 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        // 使用 Windows 11 原生 Mica 材质透出桌面背景，旧系统回退到亚克力
+        if (MicaController.IsSupported())
+            SystemBackdrop = new MicaBackdrop { Kind = MicaKind.Base };
+        else if (DesktopAcrylicController.IsSupported())
+            SystemBackdrop = new DesktopAcrylicBackdrop();
 
         var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
         var appWindow = AppWindow.GetFromWindowId(Win32Interop.GetWindowIdFromWindow(hwnd));

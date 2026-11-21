@@ -203,108 +203,46 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(IsColumnMajor));
         OnPropertyChanged(nameof(IsColumnRow));
         OnPropertyChanged(nameof(IsRowColumn));
-        OnPropertyChanged(nameof(ScanModeIndex));
         Regenerate();
-    }
-
-    public IReadOnlyList<string> ScanModeNames { get; } = new[] { "逐列式", "逐行式", "列行式", "行列式" };
-
-    public int ScanModeIndex
-    {
-        get => _scanMode switch
-        {
-            ScanMode.ColumnMajor => 0,
-            ScanMode.RowMajor => 1,
-            ScanMode.ColumnRow => 2,
-            _ => 3
-        };
-        set
-        {
-            var mode = value switch
-            {
-                0 => ScanMode.ColumnMajor,
-                1 => ScanMode.RowMajor,
-                2 => ScanMode.ColumnRow,
-                3 => ScanMode.RowColumn,
-                _ => ScanMode.ColumnMajor
-            };
-            SetScanMode(mode);
-        }
     }
 
     private bool _msbFirst;
     public bool IsForward
     {
         get => _msbFirst;
-        set { if (value && !_msbFirst) { _msbFirst = true; OnPropertyChanged(nameof(IsReversed)); OnPropertyChanged(nameof(BitOrderIndex)); Regenerate(); } }
+        set { if (value && !_msbFirst) { _msbFirst = true; OnPropertyChanged(nameof(IsReversed)); Regenerate(); } }
     }
 
     public bool IsReversed
     {
         get => !_msbFirst;
-        set { if (value && _msbFirst) { _msbFirst = false; OnPropertyChanged(nameof(IsForward)); OnPropertyChanged(nameof(BitOrderIndex)); Regenerate(); } }
-    }
-
-    public IReadOnlyList<string> BitOrderNames { get; } = new[] { "顺向", "逆向" };
-
-    public int BitOrderIndex
-    {
-        get => _msbFirst ? 0 : 1;
-        set
-        {
-            if (value == 0) IsForward = true;
-            else IsReversed = true;
-        }
+        set { if (value && _msbFirst) { _msbFirst = false; OnPropertyChanged(nameof(IsForward)); Regenerate(); } }
     }
 
     private bool _positiveCode = true;
     public bool IsNegativeCode
     {
         get => !_positiveCode;
-        set { if (value && _positiveCode) { _positiveCode = false; OnPropertyChanged(nameof(IsPositiveCode)); OnPropertyChanged(nameof(PolarityIndex)); Regenerate(); } }
+        set { if (value && _positiveCode) { _positiveCode = false; OnPropertyChanged(nameof(IsPositiveCode)); Regenerate(); } }
     }
 
     public bool IsPositiveCode
     {
         get => _positiveCode;
-        set { if (value && !_positiveCode) { _positiveCode = true; OnPropertyChanged(nameof(IsNegativeCode)); OnPropertyChanged(nameof(PolarityIndex)); Regenerate(); } }
-    }
-
-    public IReadOnlyList<string> PolarityNames { get; } = new[] { "阴码", "阳码" };
-
-    public int PolarityIndex
-    {
-        get => _positiveCode ? 1 : 0;
-        set
-        {
-            if (value == 1) IsPositiveCode = true;
-            else IsNegativeCode = true;
-        }
+        set { if (value && !_positiveCode) { _positiveCode = true; OnPropertyChanged(nameof(IsNegativeCode)); Regenerate(); } }
     }
 
     private bool _decimal;
     public bool IsHex
     {
         get => !_decimal;
-        set { if (value && _decimal) { _decimal = false; OnPropertyChanged(nameof(IsDecimal)); OnPropertyChanged(nameof(RadixIndex)); Regenerate(); } }
+        set { if (value && _decimal) { _decimal = false; OnPropertyChanged(nameof(IsDecimal)); Regenerate(); } }
     }
 
     public bool IsDecimal
     {
         get => _decimal;
-        set { if (value && !_decimal) { _decimal = true; OnPropertyChanged(nameof(IsHex)); OnPropertyChanged(nameof(RadixIndex)); Regenerate(); } }
-    }
-
-    public IReadOnlyList<string> RadixNames { get; } = new[] { "十六进制", "十进制" };
-
-    public int RadixIndex
-    {
-        get => _decimal ? 1 : 0;
-        set
-        {
-            if (value == 1) IsDecimal = true;
-            else IsHex = true;
-        }
+        set { if (value && !_decimal) { _decimal = true; OnPropertyChanged(nameof(IsHex)); Regenerate(); } }
     }
 
     private int _formatIndex;
