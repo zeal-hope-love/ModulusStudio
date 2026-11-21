@@ -1,0 +1,358 @@
+<Page
+    x:Class="ModulusStudio.App.WinUI.Views.TextModulusPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32,24,32,32">
+        <StackPanel MaxWidth="1000" HorizontalAlignment="Left" Spacing="12">
+
+            <TextBlock Text="文字取模" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,8" />
+
+            <!-- 预览 -->
+            <Border Style="{StaticResource SettingsCard}" Padding="16">
+                <StackPanel Spacing="10">
+                    <Grid>
+                        <TextBlock Text="预览" FontSize="14" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding CellSummary}" HorizontalAlignment="Right"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    </Grid>
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#111318" CornerRadius="4" Height="180">
+                            <Image Source="{Binding PreviewImage}" Stretch="Uniform" Margin="10" />
+                        </Border>
+                        <Border Grid.Column="1" Background="#0A0F0C" CornerRadius="4" Height="180">
+                            <Image Source="{Binding LcdImage}" Stretch="Uniform" Margin="10" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 文字输入 -->
+            <Border Style="{StaticResource SettingsCard}">
+                <Grid MinHeight="64">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <FontIcon Glyph="&#xE70F;" Style="{StaticResource RowIcon}" />
+                    <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                        <TextBlock Text="文字" Style="{StaticResource RowTitle}" />
+                        <TextBlock Text="支持多个字符，每个字符生成一个字模块" Style="{StaticResource FieldLabel}" />
+                    </StackPanel>
+                    <TextBox x:Name="InputTextBox" Grid.Column="2" Width="420"
+                             Text="{Binding InputText, Mode=OneWay}"
+                             TextChanged="InputText_TextChanged"
+                             FontSize="15" />
+                </Grid>
+            </Border>
+
+            <!-- 字体与点阵 -->
+            <Border Style="{StaticResource SettingsCard}">
+                <StackPanel>
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8D2;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="字体" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="选择用于生成点阵的系统字体" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding FontFamilies}"
+                                  SelectedItem="{Binding SelectedFont, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE7C3;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="点阵大小" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="以像素为单位的字宽与字高" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <NumberBox x:Name="CellWidthBox" Width="110" Minimum="3" Maximum="256" SmallChange="1"
+                                       PlaceholderText="宽" Tag="cellWidth" ValueChanged="NumberBox_ValueChanged" />
+                            <TextBlock Text="×" VerticalAlignment="Center"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            <NumberBox x:Name="CellHeightBox" Width="110" Minimum="3" Maximum="256" SmallChange="1"
+                                       PlaceholderText="高" Tag="cellHeight" ValueChanged="NumberBox_ValueChanged" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8A9;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="缩放与宽度" Style="{StaticResource RowTitle}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                            <CheckBox Content="等比缩放" MinWidth="0" IsChecked="{Binding LockAspect}" />
+                            <CheckBox Content="固定宽度" MinWidth="0" IsChecked="{Binding FixedWidth}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8D2;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="字形样式" Style="{StaticResource RowTitle}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                            <CheckBox Content="加粗" MinWidth="0" IsChecked="{Binding Bold}" />
+                            <CheckBox Content="倾斜" MinWidth="0" IsChecked="{Binding Italic}" />
+                            <CheckBox Content="下划线" MinWidth="0" IsChecked="{Binding Underline}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8AB;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="偏移像素" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="字形在单元格内的平移量" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <NumberBox x:Name="OffsetXBox" Width="110" Minimum="-16" Maximum="16" SmallChange="1"
+                                       PlaceholderText="右移" Tag="offsetX" ValueChanged="NumberBox_ValueChanged" />
+                            <NumberBox x:Name="OffsetYBox" Width="110" Minimum="-16" Maximum="16" SmallChange="1"
+                                       PlaceholderText="下移" Tag="offsetY" ValueChanged="NumberBox_ValueChanged" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 取模选项 -->
+            <Border Style="{StaticResource SettingsCard}">
+                <StackPanel>
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE713;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="取模方式" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="决定字节内像素的排列与输出顺序" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding ScanModeNames}"
+                                  SelectedIndex="{Binding ScanModeIndex, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE790;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="点阵格式" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="阴码点亮为 0，阳码点亮为 1" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding PolarityNames}"
+                                  SelectedIndex="{Binding PolarityIndex, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8AB;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="取模走向" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="顺向高位在前，逆向低位在前" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding BitOrderNames}"
+                                  SelectedIndex="{Binding BitOrderIndex, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8F1;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="数据进制" Style="{StaticResource RowTitle}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding RadixNames}"
+                                  SelectedIndex="{Binding RadixIndex, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8D2;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="字符集" Style="{StaticResource RowTitle}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding CharsetNames}"
+                                  SelectedIndex="{Binding CharsetIndex, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE713;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="渲染后端" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="GDI 更接近原软件，Skia 基于字形轮廓" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding RasterizerNames}"
+                                  SelectedIndex="{Binding RasterizerIndex, Mode=TwoWay}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 输出格式 -->
+            <Border Style="{StaticResource SettingsCard}">
+                <StackPanel>
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8A5;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="输出格式" Style="{StaticResource RowTitle}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="2" Width="220"
+                                  ItemsSource="{Binding FormatNames}"
+                                  SelectedIndex="{Binding FormatIndex, Mode=TwoWay}" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8A5;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="每行字节数" Style="{StaticResource RowTitle}" />
+                        </StackPanel>
+                        <NumberBox x:Name="BytesPerLineBox" Grid.Column="2" Width="110"
+                                   Minimum="1" Maximum="80" SmallChange="1"
+                                   Tag="bytesPerLine" ValueChanged="NumberBox_ValueChanged" />
+                    </Grid>
+
+                    <Border Style="{StaticResource RowDivider}" />
+
+                    <Grid MinHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE70F;" Style="{StaticResource RowIcon}" />
+                        <StackPanel Grid.Column="1" Margin="16,0,16,0" VerticalAlignment="Center">
+                            <TextBlock Text="字符注释" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="在数据块前添加字符注释" Style="{StaticResource FieldLabel}" />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="2" IsOn="{Binding AddCharComment, Mode=TwoWay}" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 字模数据 -->
+            <Border Style="{StaticResource SettingsCard}" Padding="16">
+                <Grid RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="字模数据" FontSize="14" FontWeight="SemiBold" />
+                    <TextBox Grid.Row="1" Height="280"
+                             Text="{Binding OutputCode, Mode=OneWay}"
+                             IsReadOnly="True"
+                             AcceptsReturn="True"
+                             TextWrapping="NoWrap"
+                             FontFamily="{StaticResource CodeFont}"
+                             FontSize="12"
+                             Padding="10"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                </Grid>
+            </Border>
+
+            <!-- 操作 -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding StatusText}" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                    <Button Content="复制代码" Command="{Binding CopyCommand}" />
+                    <Button Content="保存代码" Command="{Binding SaveTextCommand}" />
+                    <Button Content="导出字库" Command="{Binding SaveBinaryCommand}" />
+                    <Button Content="生成 GB2312 字库" Command="{Binding SaveLibraryCommand}"
+                            Style="{StaticResource AccentButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ModulusStudio.App/ModulusStudio.App.csproj" />
+    <Project Path="src/ModulusStudio.App.WinUI/ModulusStudio.App.WinUI.csproj" />
+    <Project Path="src/ModulusStudio.Core/ModulusStudio.Core.csproj" />
+    <Project Path="src/ModulusStudio.Fonts/ModulusStudio.Fonts.csproj" />
+    <Project Path="src/ModulusStudio.Imaging/ModulusStudio.Imaging.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ModulusStudio.Core.Tests/ModulusStudio.Core.Tests.csproj" />
+  </Folder>
+</Solution>
