@@ -76,12 +76,12 @@
                                       IsOn="{Binding ReverseBits, Mode=TwoWay}" />
 
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <CheckBox Content="自右至左" MinWidth="0" IsChecked="{Binding RightToLeft}" />
-                            <CheckBox Content="自底至顶" MinWidth="0" IsChecked="{Binding BottomToTop}" />
+                            <CheckBox Content="自右至左" MinWidth="0" IsChecked="{Binding RightToLeft, Mode=TwoWay}" />
+                            <CheckBox Content="自底至顶" MinWidth="0" IsChecked="{Binding BottomToTop, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <CheckBox Content="反色" MinWidth="0" IsChecked="{Binding InvertColors}" />
-                            <CheckBox Content="包含 BMP 头" MinWidth="0" IsChecked="{Binding IncludeHeader}" />
+                            <CheckBox Content="反色" MinWidth="0" IsChecked="{Binding InvertColors, Mode=TwoWay}" />
+                            <CheckBox Content="包含 BMP 头" MinWidth="0" IsChecked="{Binding IncludeHeader, Mode=TwoWay}" />
                         </StackPanel>
                     </StackPanel>
                 </Border>

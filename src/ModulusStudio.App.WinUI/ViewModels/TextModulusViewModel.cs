@@ -33,6 +33,7 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
         SaveTextCommand = new RelayCommand(() => _ = RunAsync(SaveTextAsync));
         SaveBinaryCommand = new RelayCommand(() => _ = RunAsync(SaveBinaryAsync));
         SaveLibraryCommand = new RelayCommand(() => _ = RunAsync(SaveLibraryAsync));
+        ResetTemplateCommand = new RelayCommand(() => TemplateText = CodeTemplate.GetDefault(FormatIndex));
 
         Regenerate();
     }
@@ -50,6 +51,25 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
     public RelayCommand SaveTextCommand { get; }
     public RelayCommand SaveBinaryCommand { get; }
     public RelayCommand SaveLibraryCommand { get; }
+    public RelayCommand ResetTemplateCommand { get; }
+
+    private string _templateText = CodeTemplate.C51;
+
+    /// <summary>当前输出模板，支持直接编辑，改动后立即重新生成。</summary>
+    public string TemplateText
+    {
+        get => _templateText;
+        set { if (SetProperty(ref _templateText, value ?? string.Empty)) Regenerate(); }
+    }
+
+    /// <summary>演示动画使用的首个字符点阵。</summary>
+    public MonoBitmap? DemoBitmap { get; private set; }
+
+    /// <summary>演示动画使用的首个字符字模字节。</summary>
+    public IReadOnlyList<byte> DemoBytes { get; private set; } = Array.Empty<byte>();
+
+    /// <summary>当前取模方式，供界面绘制演示动画。</summary>
+    public ScanMode CurrentScanMode => _scanMode;
 
     #region 字体参数
 
@@ -249,7 +269,13 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
     public int FormatIndex
     {
         get => _formatIndex;
-        set { if (SetProperty(ref _formatIndex, value)) Regenerate(); }
+        set
+        {
+            if (!SetProperty(ref _formatIndex, value)) return;
+            // C51 / A51 切换时载入对应默认模板；自定义保留用户当前编辑内容
+            if (value is 0 or 1) TemplateText = CodeTemplate.GetDefault(value);
+            Regenerate();
+        }
     }
 
     private int _bytesPerLine = 16;
@@ -384,26 +410,23 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
             var blocks = new List<string>(_glyphBytes.Count);
             for (var i = 0; i < _glyphBytes.Count; i++)
             {
-                string block;
-                if (FormatIndex == 1)
-                {
-                    // A51：字符头 " 中(0)" + 行尾注释 "中",0，与原软件一致
-                    block = CodeFormatter.Format(
-                        _glyphBytes[i],
-                        formatOptions,
-                        $" {_glyphChars[i]}({i})",
-                        $"{formatOptions.CommentPrefix}{_glyphChars[i]}{formatOptions.CommentSuffix}{i}");
-                }
-                else
-                {
-                    block = CodeFormatter.Format(_glyphBytes[i], formatOptions);
-                    if (AddCharComment)
-                        block = $"/* '{_glyphChars[i]}' */{Environment.NewLine}{block}";
-                }
+                var trailing = FormatIndex == 1
+                    ? $"{formatOptions.CommentPrefix}{_glyphChars[i]}{formatOptions.CommentSuffix}{i}"
+                    : null;
+                var block = CodeTemplate.Apply(
+                    TemplateText, _glyphBytes[i], formatOptions,
+                    glyphs[i].Width, glyphs[i].Height, _glyphChars[i], i, trailing);
+                if (AddCharComment)
+                    block = $"/* '{_glyphChars[i]}' */{Environment.NewLine}{block}";
                 blocks.Add(block);
             }
 
             OutputCode = string.Join(Environment.NewLine, blocks);
+
+            DemoBitmap = glyphs.FirstOrDefault();
+            DemoBytes = _glyphBytes.FirstOrDefault() ?? Array.Empty<byte>();
+            OnPropertyChanged(nameof(DemoBitmap));
+            OnPropertyChanged(nameof(DemoBytes));
 
             var scale = 8;
             if (glyphs.Count * glyphs[0].Width > 0)

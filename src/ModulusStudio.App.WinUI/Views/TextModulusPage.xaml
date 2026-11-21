@@ -40,14 +40,14 @@
                         </Grid>
 
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <CheckBox Content="等比缩放" MinWidth="0" IsChecked="{Binding LockAspect}" />
-                            <CheckBox Content="固定宽度" MinWidth="0" IsChecked="{Binding FixedWidth}" />
+                            <CheckBox Content="等比缩放" MinWidth="0" IsChecked="{Binding LockAspect, Mode=TwoWay}" />
+                            <CheckBox Content="固定宽度" MinWidth="0" IsChecked="{Binding FixedWidth, Mode=TwoWay}" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Spacing="14">
-                            <CheckBox Content="加粗" MinWidth="0" IsChecked="{Binding Bold}" />
-                            <CheckBox Content="倾斜" MinWidth="0" IsChecked="{Binding Italic}" />
-                            <CheckBox Content="下划线" MinWidth="0" IsChecked="{Binding Underline}" />
+                            <CheckBox Content="加粗" MinWidth="0" IsChecked="{Binding Bold, Mode=TwoWay}" />
+                            <CheckBox Content="倾斜" MinWidth="0" IsChecked="{Binding Italic, Mode=TwoWay}" />
+                            <CheckBox Content="下划线" MinWidth="0" IsChecked="{Binding Underline, Mode=TwoWay}" />
                         </StackPanel>
 
                         <Grid ColumnSpacing="10">
@@ -83,25 +83,25 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <RadioButton Grid.Row="0" Grid.Column="0" Content="逐列式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsColumnMajor}" />
-                            <RadioButton Grid.Row="0" Grid.Column="1" Content="逐行式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsRowMajor}" />
-                            <RadioButton Grid.Row="1" Grid.Column="0" Content="列行式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsColumnRow}" />
-                            <RadioButton Grid.Row="1" Grid.Column="1" Content="行列式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsRowColumn}" />
+                            <RadioButton Grid.Row="0" Grid.Column="0" Content="逐列式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsColumnMajor, Mode=TwoWay}" />
+                            <RadioButton Grid.Row="0" Grid.Column="1" Content="逐行式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsRowMajor, Mode=TwoWay}" />
+                            <RadioButton Grid.Row="1" Grid.Column="0" Content="列行式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsColumnRow, Mode=TwoWay}" />
+                            <RadioButton Grid.Row="1" Grid.Column="1" Content="行列式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsRowColumn, Mode=TwoWay}" />
                         </Grid>
 
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <RadioButton Content="阴码" MinWidth="0" GroupName="Polarity" IsChecked="{Binding IsNegativeCode}" />
-                            <RadioButton Content="阳码" MinWidth="0" GroupName="Polarity" IsChecked="{Binding IsPositiveCode}" />
+                            <RadioButton Content="阴码" MinWidth="0" GroupName="Polarity" IsChecked="{Binding IsNegativeCode, Mode=TwoWay}" />
+                            <RadioButton Content="阳码" MinWidth="0" GroupName="Polarity" IsChecked="{Binding IsPositiveCode, Mode=TwoWay}" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <RadioButton Content="顺向" MinWidth="0" GroupName="BitOrder" IsChecked="{Binding IsForward}" />
-                            <RadioButton Content="逆向" MinWidth="0" GroupName="BitOrder" IsChecked="{Binding IsReversed}" />
+                            <RadioButton Content="顺向" MinWidth="0" GroupName="BitOrder" IsChecked="{Binding IsForward, Mode=TwoWay}" />
+                            <RadioButton Content="逆向" MinWidth="0" GroupName="BitOrder" IsChecked="{Binding IsReversed, Mode=TwoWay}" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Spacing="16">
-                            <RadioButton Content="十六进制" MinWidth="0" GroupName="Radix" IsChecked="{Binding IsHex}" />
-                            <RadioButton Content="十进制" MinWidth="0" GroupName="Radix" IsChecked="{Binding IsDecimal}" />
+                            <RadioButton Content="十六进制" MinWidth="0" GroupName="Radix" IsChecked="{Binding IsHex, Mode=TwoWay}" />
+                            <RadioButton Content="十进制" MinWidth="0" GroupName="Radix" IsChecked="{Binding IsDecimal, Mode=TwoWay}" />
                         </StackPanel>
 
                         <TextBlock Text="字符集" Style="{StaticResource FieldLabel}" />
@@ -113,6 +113,23 @@
                         <ComboBox HorizontalAlignment="Stretch"
                                   ItemsSource="{Binding RasterizerNames}"
                                   SelectedIndex="{Binding RasterizerIndex, Mode=TwoWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource PanelCard}">
+                    <StackPanel Spacing="8">
+                        <Grid>
+                            <TextBlock Text="取模演示" Style="{StaticResource SectionHeader}" />
+                            <TextBlock x:Name="DemoCaption" HorizontalAlignment="Right"
+                                       Style="{StaticResource FieldLabel}" />
+                        </Grid>
+                        <Border Background="#F2F5F9" CornerRadius="6" Padding="8">
+                            <Viewbox Height="150" Stretch="Uniform" HorizontalAlignment="Center">
+                                <Grid x:Name="DemoGrid" />
+                            </Viewbox>
+                        </Border>
+                        <TextBlock Text="高亮块为当前字节对应的像素，按上方取模方式循环播放"
+                                   Style="{StaticResource FieldLabel}" TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
 
@@ -151,6 +168,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -210,7 +228,31 @@
                 </Grid>
             </Border>
 
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Border Grid.Row="3" Style="{StaticResource PanelCard}">
+                <StackPanel Spacing="8">
+                    <Grid>
+                        <TextBlock Text="输出模板" Style="{StaticResource SectionHeader}" />
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                            <ComboBox Width="130"
+                                      ItemsSource="{Binding FormatNames}"
+                                      SelectedIndex="{Binding FormatIndex, Mode=TwoWay}" />
+                            <Button Content="恢复默认" Command="{Binding ResetTemplateCommand}" />
+                        </StackPanel>
+                    </Grid>
+                    <TextBox x:Name="TemplateBox" Height="112"
+                             Text="{Binding TemplateText, Mode=OneWay}"
+                             AcceptsReturn="True"
+                             FontFamily="{StaticResource CodeFont}"
+                             FontSize="12"
+                             TextWrapping="NoWrap"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                    <TextBlock Style="{StaticResource FieldLabel}" TextWrapping="Wrap"
+                               Text="占位符：/*_char_*/ 字符  /*_index_*/ 序号  /*_w_*/ 宽  /*_h_*/ 高  /*_len_*/ 字节数  /*_data_*/ 字模数据" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
                 <Button Content="复制代码" Command="{Binding CopyCommand}" />
                 <Button Content="保存代码" Command="{Binding SaveTextCommand}" />
                 <Button Content="导出字库" Command="{Binding SaveBinaryCommand}" />
