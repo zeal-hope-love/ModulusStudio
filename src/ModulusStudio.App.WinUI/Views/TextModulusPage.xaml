@@ -74,7 +74,7 @@
                         <TextBlock Text="取模选项" Style="{StaticResource SectionHeader}" />
 
                         <TextBlock Text="取模方式" Style="{StaticResource FieldLabel}" />
-                        <Grid ColumnSpacing="8" RowSpacing="4">
+                        <Grid ColumnSpacing="8" RowSpacing="8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -83,10 +83,62 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <RadioButton Grid.Row="0" Grid.Column="0" Content="逐列式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsColumnMajor, Mode=TwoWay}" />
-                            <RadioButton Grid.Row="0" Grid.Column="1" Content="逐行式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsRowMajor, Mode=TwoWay}" />
-                            <RadioButton Grid.Row="1" Grid.Column="0" Content="列行式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsColumnRow, Mode=TwoWay}" />
-                            <RadioButton Grid.Row="1" Grid.Column="1" Content="行列式" MinWidth="0" GroupName="ScanMode" IsChecked="{Binding IsRowColumn, Mode=TwoWay}" />
+
+                            <Border x:Name="ModeTileColumnRow" Grid.Row="0" Grid.Column="0" Tag="columnRow"
+                                    Tapped="ModeTile_Tapped" CornerRadius="6" Padding="6" BorderThickness="1"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                                <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                    <Border Background="#DCE2EC" CornerRadius="3" Padding="1">
+                                        <Viewbox Height="52">
+                                            <Grid x:Name="ModeDemoColumnRow" Width="48" Height="48" Background="#F7F9FC" />
+                                        </Viewbox>
+                                    </Border>
+                                    <TextBlock Text="列行式" FontSize="12" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="ModeTileRowColumn" Grid.Row="0" Grid.Column="1" Tag="rowColumn"
+                                    Tapped="ModeTile_Tapped" CornerRadius="6" Padding="6" BorderThickness="1"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                                <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                    <Border Background="#DCE2EC" CornerRadius="3" Padding="1">
+                                        <Viewbox Height="52">
+                                            <Grid x:Name="ModeDemoRowColumn" Width="48" Height="48" Background="#F7F9FC" />
+                                        </Viewbox>
+                                    </Border>
+                                    <TextBlock Text="行列式" FontSize="12" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="ModeTileColumnMajor" Grid.Row="1" Grid.Column="0" Tag="columnMajor"
+                                    Tapped="ModeTile_Tapped" CornerRadius="6" Padding="6" BorderThickness="1"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                                <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                    <Border Background="#DCE2EC" CornerRadius="3" Padding="1">
+                                        <Viewbox Height="52">
+                                            <Grid x:Name="ModeDemoColumnMajor" Width="48" Height="48" Background="#F7F9FC" />
+                                        </Viewbox>
+                                    </Border>
+                                    <TextBlock Text="逐列式" FontSize="12" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border x:Name="ModeTileRowMajor" Grid.Row="1" Grid.Column="1" Tag="rowMajor"
+                                    Tapped="ModeTile_Tapped" CornerRadius="6" Padding="6" BorderThickness="1"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                                <StackPanel Spacing="4" HorizontalAlignment="Center">
+                                    <Border Background="#DCE2EC" CornerRadius="3" Padding="1">
+                                        <Viewbox Height="52">
+                                            <Grid x:Name="ModeDemoRowMajor" Width="48" Height="48" Background="#F7F9FC" />
+                                        </Viewbox>
+                                    </Border>
+                                    <TextBlock Text="逐行式" FontSize="12" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
                         </Grid>
 
                         <StackPanel Orientation="Horizontal" Spacing="16">
@@ -117,23 +169,6 @@
                 </Border>
 
                 <Border Style="{StaticResource PanelCard}">
-                    <StackPanel Spacing="8">
-                        <Grid>
-                            <TextBlock Text="取模演示" Style="{StaticResource SectionHeader}" />
-                            <TextBlock x:Name="DemoCaption" HorizontalAlignment="Right"
-                                       Style="{StaticResource FieldLabel}" />
-                        </Grid>
-                        <Border Background="#F2F5F9" CornerRadius="6" Padding="8">
-                            <Viewbox Height="150" Stretch="Uniform" HorizontalAlignment="Center">
-                                <Grid x:Name="DemoGrid" />
-                            </Viewbox>
-                        </Border>
-                        <TextBlock Text="高亮块为当前字节对应的像素，按上方取模方式循环播放"
-                                   Style="{StaticResource FieldLabel}" TextWrapping="Wrap" />
-                    </StackPanel>
-                </Border>
-
-                <Border Style="{StaticResource PanelCard}">
                     <StackPanel Spacing="10">
                         <TextBlock Text="输出格式" Style="{StaticResource SectionHeader}" />
 
@@ -157,6 +192,22 @@
 
                         <CheckBox Content="在数据块前添加字符注释" MinWidth="0"
                                   IsChecked="{Binding AddCharComment, Mode=TwoWay}" />
+
+                        <Grid Margin="0,2,0,0">
+                            <TextBlock Text="输出模板" Style="{StaticResource FieldLabel}" />
+                            <Button Content="恢复默认" HorizontalAlignment="Right" Padding="8,2" FontSize="12"
+                                    Command="{Binding ResetTemplateCommand}" />
+                        </Grid>
+                        <TextBox x:Name="TemplateBox" Height="132"
+                                 Text="{Binding TemplateText, Mode=OneWay}"
+                                 AcceptsReturn="True"
+                                 FontFamily="{StaticResource CodeFont}"
+                                 FontSize="11"
+                                 TextWrapping="NoWrap"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                        <TextBlock Style="{StaticResource FieldLabel}" TextWrapping="Wrap"
+                                   Text="占位符：/*_char_*/ 字符  /*_index_*/ 序号  /*_w_*/ 宽  /*_h_*/ 高  /*_len_*/ 字节数  /*_data_*/ 字模数据" />
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -168,7 +219,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -228,31 +278,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Row="3" Style="{StaticResource PanelCard}">
-                <StackPanel Spacing="8">
-                    <Grid>
-                        <TextBlock Text="输出模板" Style="{StaticResource SectionHeader}" />
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-                            <ComboBox Width="130"
-                                      ItemsSource="{Binding FormatNames}"
-                                      SelectedIndex="{Binding FormatIndex, Mode=TwoWay}" />
-                            <Button Content="恢复默认" Command="{Binding ResetTemplateCommand}" />
-                        </StackPanel>
-                    </Grid>
-                    <TextBox x:Name="TemplateBox" Height="112"
-                             Text="{Binding TemplateText, Mode=OneWay}"
-                             AcceptsReturn="True"
-                             FontFamily="{StaticResource CodeFont}"
-                             FontSize="12"
-                             TextWrapping="NoWrap"
-                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto" />
-                    <TextBlock Style="{StaticResource FieldLabel}" TextWrapping="Wrap"
-                               Text="占位符：/*_char_*/ 字符  /*_index_*/ 序号  /*_w_*/ 宽  /*_h_*/ 高  /*_len_*/ 字节数  /*_data_*/ 字模数据" />
-                </StackPanel>
-            </Border>
-
-            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
                 <Button Content="复制代码" Command="{Binding CopyCommand}" />
                 <Button Content="保存代码" Command="{Binding SaveTextCommand}" />
                 <Button Content="导出字库" Command="{Binding SaveBinaryCommand}" />

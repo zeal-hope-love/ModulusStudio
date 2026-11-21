@@ -62,13 +62,7 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
         set { if (SetProperty(ref _templateText, value ?? string.Empty)) Regenerate(); }
     }
 
-    /// <summary>演示动画使用的首个字符点阵。</summary>
-    public MonoBitmap? DemoBitmap { get; private set; }
-
-    /// <summary>演示动画使用的首个字符字模字节。</summary>
-    public IReadOnlyList<byte> DemoBytes { get; private set; } = Array.Empty<byte>();
-
-    /// <summary>当前取模方式，供界面绘制演示动画。</summary>
+    /// <summary>当前取模方式，供演示动画标记选中项。</summary>
     public ScanMode CurrentScanMode => _scanMode;
 
     #region 字体参数
@@ -223,6 +217,7 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(IsColumnMajor));
         OnPropertyChanged(nameof(IsColumnRow));
         OnPropertyChanged(nameof(IsRowColumn));
+        OnPropertyChanged(nameof(CurrentScanMode));
         Regenerate();
     }
 
@@ -422,11 +417,6 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
             }
 
             OutputCode = string.Join(Environment.NewLine, blocks);
-
-            DemoBitmap = glyphs.FirstOrDefault();
-            DemoBytes = _glyphBytes.FirstOrDefault() ?? Array.Empty<byte>();
-            OnPropertyChanged(nameof(DemoBitmap));
-            OnPropertyChanged(nameof(DemoBytes));
 
             var scale = 8;
             if (glyphs.Count * glyphs[0].Width > 0)
