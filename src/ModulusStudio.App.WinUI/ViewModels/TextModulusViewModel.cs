@@ -287,6 +287,14 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
         set { if (SetProperty(ref _addCharComment, value)) Regenerate(); }
     }
 
+    private bool _dedupeRepeats = true;
+    /// <summary>输入文字中的重复字符只生成一次。</summary>
+    public bool DedupeRepeats
+    {
+        get => _dedupeRepeats;
+        set { if (SetProperty(ref _dedupeRepeats, value)) Regenerate(); }
+    }
+
     private string _inputText = "中";
     public string InputText
     {
@@ -379,6 +387,7 @@ public sealed class TextModulusViewModel : ObservableObject, IDisposable
         try
         {
             var chars = CharsetUtil.SplitChars(string.IsNullOrEmpty(InputText) ? " " : InputText);
+            if (DedupeRepeats) chars = chars.Distinct().ToList();
             if (chars.Count > 512) chars = chars.Take(512).ToList();
 
             var scan = new ScanOptions

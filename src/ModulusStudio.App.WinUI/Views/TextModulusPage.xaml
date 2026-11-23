@@ -156,6 +156,9 @@
                             <RadioButton Content="十进制" MinWidth="0" GroupName="Radix" IsChecked="{Binding IsDecimal, Mode=TwoWay}" />
                         </StackPanel>
 
+                        <CheckBox Content="重复字符只生成一次" MinWidth="0"
+                                  IsChecked="{Binding DedupeRepeats, Mode=TwoWay}" />
+
                         <TextBlock Text="字符集" Style="{StaticResource FieldLabel}" />
                         <ComboBox HorizontalAlignment="Stretch"
                                   ItemsSource="{Binding CharsetNames}"
